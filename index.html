@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decoding Fashion Customer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">\
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --cream: #f8f4ee;
+      --ink: #1a1410;
+      --rust: #c0522a;
+      --gold: #c89b3c;
+      --sage: #6b7c5e;
+      --mauve: #8a6e7a;
+      --dust: #e8e0d4;
+      --light-rust: #f0d4c8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    /* ── HERO ───────────────────────────── */
+    header {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 80px 60px 70px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: var(--rust);
+      opacity: 0.18;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 20%;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.12;
+    }
+    .header-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      max-width: 700px;
+      margin-bottom: 24px;
+    }
+    header h1 em {
+      font-style: italic;
+      color: var(--rust);
+    }
+    .header-meta {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(248,244,238,0.15);
+    }
+    .header-meta span { font-size: 13px; opacity: 0.65; }
+    .header-meta strong { color: var(--gold); font-weight: 500; }
+
+    /* ── LAYOUT ─────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+    section {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--dust);
+    }
+    section:last-child { border-bottom: none; }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .section-body {
+      font-size: 15px;
+      line-height: 1.75;
+      max-width: 680px;
+      color: #4a3f38;
+      margin-bottom: 40px;
+    }
+
+    /* ── DATA INTRO CARDS ───────────────── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+    }
+    .stat-card {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 28px 24px;
+      border-radius: 4px;
+    }
+    .stat-card .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .stat-card .label { font-size: 12px; opacity: 0.65; letter-spacing: 0.5px; }
+
+    /* ── CHART WRAPPERS ─────────────────── */
+    .chart-card {
+      background: white;
+      border: 1px solid var(--dust);
+      border-radius: 6px;
+      padding: 36px;
+      margin-bottom: 16px;
+    }
+    .chart-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+    .chart-subtitle {
+      font-size: 13px;
+      color: #8a7a70;
+      margin-bottom: 28px;
+    }
+
+    /* controls */
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+    .controls label {
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--rust);
+      font-weight: 500;
+    }
+    .controls select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 7px 14px;
+      border: 1.5px solid var(--dust);
+      border-radius: 3px;
+      background: var(--cream);
+      color: var(--ink);
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .controls select:focus { border-color: var(--rust); }
+
+    /* legend */
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      font-size: 12px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 7px; }
+    .legend-swatch {
+      width: 14px; height: 14px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* takeaway box */
+    .takeaway {
+      background: var(--light-rust);
+      border-left: 3px solid var(--rust);
+      padding: 18px 22px;
+      margin-top: 24px;
+      border-radius: 0 4px 4px 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: #3a2820;
+    }
+    .takeaway strong { color: var(--rust); }
+
+    /* ── TOOLTIP ────────────────────────── */
+    .d3-tooltip {
+      position: fixed;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 9999;
+      max-width: 200px;
+      line-height: 1.6;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    .d3-tooltip.visible { opacity: 1; }
+
+    /* ── REFERENCES ─────────────────────── */
+    .ref-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .ref-list li {
+      font-size: 13px;
+      line-height: 1.6;
+      padding-left: 18px;
+      position: relative;
+      color: #5a4f48;
+    }
+    .ref-list li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--rust);
+    }
+    .ref-list a { color: var(--rust); text-decoration: none; }
+    .ref-list a:hover { text-decoration: underline; }
+
+    /* ── SUMMARY ────────────────────────── */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 36px;
+    }
+    .finding-card {
+      border: 1.5px solid var(--dust);
+      border-radius: 6px;
+      padding: 28px;
+    }
+    .finding-card .icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    .finding-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    .finding-card p { font-size: 13.5px; line-height: 1.65; color: #5a4f48; }
+
+    /* ── FOOTER ─────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 40px 60px;
+      font-size: 12px;
+      opacity: 0.9;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    svg text { font-family: 'DM Sans', sans-serif; }
+
+    @media (max-width: 640px) {
+      header { padding: 50px 24px; }
+      .container { padding: 0 20px; }
+      .chart-card { padding: 20px; }
+      footer { padding: 30px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header>
+  <div class="container">
+    <p class="header-tag">DS4200 · Information Presentation &amp; Data Visualization</p>
+    <h1>Data Science Project</h1>
+    <p style="max-width:600px;font-size:15px;line-height:1.75;opacity:0.75;margin-top:4px;">
+      text
+    </p>
+    <div class="header-meta">
+      <span><strong>Group:</strong> Yung-Chi Hung · Rianna Wadhwani · Victor Zarate Arvizu</span>
+      <span><strong>Dataset:</strong> Customer Shopping Behaviour Analysis (Kaggle)</span>
+      <span><strong>Course:</strong> DS4200 · Spring 2026</span>
+    </div>
+  </div>
+</header>
+
+
+<!-- ═══════════ INTRO ═══════════ -->
+<section id="intro">
+  <div class="container">
+    <p class="section-label">About the project</p>
+    <h2 class="section-title">Introduction</h2>
+    <p class="section-body">
+      text
+    </p>
+    <p class="section-body" style="margin-top:-20px;">
+      text
+    </p>
+    <p class="section-body" style="margin-top:8px;">
+      text
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════ INTRO ═══════════ -->
+<section id="intro">
+  <div class="container">
+    <p class="section-label">About the project</p>
+    <h2 class="section-title">Introduction to Data</h2>
+    <p class="section-body">
+      text
+    </p>
+    <p class="section-body" style="margin-top:-20px;">
+      text
+    </p>
+    <p class="section-body" style="margin-top:8px;">
+      text
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════ VIZ 1 — BAR CHART ═══════════ -->
+<section id="viz1">
+  <div class="container">
+    <p class="section-label">Visualization 1 · D3.js Bar Chart</p>
+    <h2 class="section-title">Most Popular Purchase in U.S.</h2>
+    <p class="section-body">
+      text
+    </p>
+    <iframe src="map.html" width="850" height="550" frameborder="0"></iframe>
+  </div>
+</section>
+
+<!-- ═══════════ VIZ 2 — BOXPLOT ═══════════ -->
+<section id="viz2">
+  <div class="container">
+    <p class="section-label">Visualization 2 · D3.js Boxplot</p>
+    <h2 class="section-title">Purchase Amount Distribution by Season &amp; Category</h2>
+    <p class="section-body">
+      text
+    </p>
+    <iframe src="boxplot.html" width="800" height="550" frameborder="0"></iframe>
+  </div>
+</section>
+
+<!-- ═══════════ VIZ 3 — HEATMAP ═══════════ -->
+<section id="viz3">
+  <div class="container">
+    <p class="section-label">Visualization 3 · D3.js Heatmap</p>
+    <h2 class="section-title">Purchase Frequency by Item</h2>
+    <p class="section-body">
+      text
+    </p>
+    <iframe src="heatmap.html" width="750" height="500" frameborder="0"></iframe>
+  </div>
+</section>
+
+<!-- ═══════════ VIZ 4 — D3 ═══════════ -->
+<section id="viz4">
+  <div class="container">
+    <p class="section-label">Visualization 3 · D3.js Heatmap</p>
+    <h2 class="section-title">Purchase Frequency by Item</h2>
+    <p class="section-body">
+      text
+    </p>
+  </div>
+</section>
+<body>
+  <div id='vis'>
+    <script src='https://d3js.org/d3.v7.min.js'></script>
+    <script src='main.js'></script>
+  </body></div>
+
+<!-- ═══════════ VIZ 5 — D3 ═══════════ -->
+<section id="viz5">
+  <div class="container">
+    <p class="section-label">Visualization 3 · D3.js Heatmap</p>
+    <h2 class="section-title">Purchase Frequency by Item</h2>
+    <p class="section-body">
+      text
+    </p>
+    <iframe src="treemap.html" width="750" height="500" frameborder="0"></iframe>
+  </div>
+</section>
+<!-- ═══════════ SUMMARY ═══════════ -->
+<section id="summary">
+  <div class="container">
+    <p class="section-label">Conclusions</p>
+    <h2 class="section-title">What We Learned</h2>
+    <p class="section-body">
+      text
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════ References ═══════════ -->
+<section id="summary">
+  <div class="container">
+    <p class="section-label">References</p>
+    <h2 class="section-title">References</h2>
+    <ul>
+      <li>Lim, W. M., Kumar, S., Pandey, N., Verma, D., & Kumar, D. (2022). Evolution and trends in consumer behaviour: Insights from Journal of Consumer Behaviour. Journal of Consumer Behaviour, 22(1), 217–232. https://doi.org/10.1002/cb.2118 </li>
+      <li>Melnyk, V., Carrillat, F. A., & Melnyk, V. (2021). The Influence of Social Norms on Consumer Behavior: A Meta-Analysis. Journal of Marketing, 86(3), 98–120. https://doi.org/10.1177/00222429211029199 </li>
+      <li>Rozenkowska, K. (2023). Theory of planned behavior in consumer behavior research: A systematic literature review. International Journal of Consumer Studies, 47(6), 2670–2700. https://doi.org/10.1111/ijcs.12970 </li>
+      <li>Hermann, E., & Puntoni, S. (2024). Artificial intelligence and consumer behavior: From predictive to generative AI. Journal of Business Research, 180, 114720. https://doi.org/10.1016/j.jbusres.2024.114720 </li>
+      <li>https://www.kaggle.com/datasets/wardabilal/customer-shopping-behaviour-analysis</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>DS4200 · Decoding Fashion Customer · Spring 2025</span>
+  <span>Yung-Chi Hung · Rianna Wadhwani · Victor Zarate Arvizu</span>
+</footer>
+
+<!-- ══════════ TOOLTIP ══════════ -->
+<div class="d3-tooltip" id="tooltip"></div>
+
+<!-- ══════════ D3 ══════════ -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ── EMBEDDED DATA ──────────────────────────────────────────────────────────
+const CHART_DATA = {"boxplot":{"All":{"Spring":{"Clothing":{"q1":39.0,"median":62.0,"q3":82.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":36.0,"median":56.0,"q3":77.0,"wl":20.0,"wh":99.0},"Footwear":{"q1":39.0,"median":58.0,"q3":79.0,"wl":21.0,"wh":99.0},"Outerwear":{"q1":29.0,"median":53.0,"q3":78.0,"wl":20.0,"wh":100.0}},"Summer":{"Clothing":{"q1":36.0,"median":55.0,"q3":76.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":43.0,"median":63.0,"q3":81.0,"wl":20.0,"wh":100.0},"Footwear":{"q1":38.0,"median":59.0,"q3":78.0,"wl":20.0,"wh":100.0},"Outerwear":{"q1":33.0,"median":51.0,"q3":80.0,"wl":21.0,"wh":100.0}},"Fall":{"Clothing":{"q1":38.0,"median":61.0,"q3":84.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":40.0,"median":62.0,"q3":83.0,"wl":20.0,"wh":100.0},"Footwear":{"q1":46.0,"median":64.0,"q3":84.0,"wl":21.0,"wh":100.0},"Outerwear":{"q1":43.0,"median":58.5,"q3":80.0,"wl":22.0,"wh":100.0}},"Winter":{"Clothing":{"q1":41.0,"median":63.0,"q3":80.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":40.0,"median":60.0,"q3":80.0,"wl":20.0,"wh":100.0},"Footwear":{"q1":39.0,"median":63.0,"q3":83.0,"wl":20.0,"wh":100.0},"Outerwear":{"q1":34.0,"median":53.5,"q3":81.0,"wl":20.0,"wh":100.0}}},"Male":{"Spring":{"Clothing":{"q1":38.0,"median":62.0,"q3":82.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":37.0,"median":55.5,"q3":77.0,"wl":20.0,"wh":99.0},"Footwear":{"q1":42.0,"median":57.0,"q3":78.0,"wl":21.0,"wh":99.0},"Outerwear":{"q1":33.0,"median":52.5,"q3":77.0,"wl":20.0,"wh":100.0}},"Summer":{"Clothing":{"q1":35.0,"median":53.0,"q3":73.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":40.0,"median":62.5,"q3":81.0,"wl":20.0,"wh":100.0},"Footwear":{"q1":37.0,"median":59.0,"q3":79.0,"wl":20.0,"wh":100.0},"Outerwear":{"q1":32.0,"median":50.0,"q3":79.0,"wl":22.0,"wh":100.0}},"Fall":{"Clothing":{"q1":36.0,"median":61.0,"q3":85.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":39.0,"median":63.0,"q3":83.0,"wl":20.0,"wh":100.0},"Footwear":{"q1":49.0,"median":65.0,"q3":83.0,"wl":22.0,"wh":100.0},"Outerwear":{"q1":42.0,"median":56.0,"q3":79.0,"wl":22.0,"wh":100.0}},"Winter":{"Clothing":{"q1":41.0,"median":64.0,"q3":82.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":40.0,"median":57.0,"q3":80.0,"wl":20.0,"wh":100.0},"Footwear":{"q1":38.0,"median":64.0,"q3":84.0,"wl":20.0,"wh":100.0},"Outerwear":{"q1":35.0,"median":52.0,"q3":80.0,"wl":22.0,"wh":99.0}}},"Female":{"Spring":{"Clothing":{"q1":41.0,"median":63.0,"q3":82.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":33.0,"median":56.0,"q3":77.0,"wl":20.0,"wh":98.0},"Footwear":{"q1":37.0,"median":62.0,"q3":79.0,"wl":21.0,"wh":99.0},"Outerwear":{"q1":27.0,"median":53.0,"q3":81.0,"wl":20.0,"wh":98.0}},"Summer":{"Clothing":{"q1":42.0,"median":58.0,"q3":82.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":45.0,"median":64.0,"q3":82.0,"wl":20.0,"wh":99.0},"Footwear":{"q1":38.0,"median":56.0,"q3":77.0,"wl":20.0,"wh":99.0},"Outerwear":{"q1":39.0,"median":51.0,"q3":85.0,"wl":21.0,"wh":99.0}},"Fall":{"Clothing":{"q1":41.0,"median":61.0,"q3":81.0,"wl":21.0,"wh":98.0},"Accessories":{"q1":43.0,"median":60.0,"q3":82.0,"wl":20.0,"wh":100.0},"Footwear":{"q1":37.0,"median":58.0,"q3":84.0,"wl":21.0,"wh":98.0},"Outerwear":{"q1":43.0,"median":59.0,"q3":86.0,"wl":24.0,"wh":100.0}},"Winter":{"Clothing":{"q1":37.0,"median":60.0,"q3":77.0,"wl":20.0,"wh":100.0},"Accessories":{"q1":42.0,"median":65.0,"q3":80.0,"wl":21.0,"wh":100.0},"Footwear":{"q1":41.0,"median":58.0,"q3":79.0,"wl":21.0,"wh":99.0},"Outerwear":{"q1":28.0,"median":60.5,"q3":83.0,"wl":20.0,"wh":100.0}}}},"heatmap":{"Backpack":{"Weekly":23,"Bi-Weekly":21,"Fortnightly":22,"Monthly":11,"Quarterly":21,"Every 3 Months":23,"Annually":22},"Belt":{"Weekly":22,"Bi-Weekly":24,"Fortnightly":19,"Monthly":23,"Quarterly":22,"Every 3 Months":27,"Annually":24},"Blouse":{"Weekly":17,"Bi-Weekly":31,"Fortnightly":20,"Monthly":15,"Quarterly":25,"Every 3 Months":31,"Annually":32},"Boots":{"Weekly":23,"Bi-Weekly":23,"Fortnightly":25,"Monthly":8,"Quarterly":31,"Every 3 Months":19,"Annually":15},"Coat":{"Weekly":26,"Bi-Weekly":20,"Fortnightly":27,"Monthly":20,"Quarterly":27,"Every 3 Months":18,"Annually":23},"Dress":{"Weekly":23,"Bi-Weekly":20,"Fortnightly":20,"Monthly":27,"Quarterly":17,"Every 3 Months":28,"Annually":31},"Gloves":{"Weekly":19,"Bi-Weekly":23,"Fortnightly":21,"Monthly":20,"Quarterly":19,"Every 3 Months":16,"Annually":22},"Handbag":{"Weekly":15,"Bi-Weekly":20,"Fortnightly":21,"Monthly":26,"Quarterly":19,"Every 3 Months":31,"Annually":21},"Hat":{"Weekly":19,"Bi-Weekly":17,"Fortnightly":19,"Monthly":29,"Quarterly":29,"Every 3 Months":20,"Annually":21},"Hoodie":{"Weekly":20,"Bi-Weekly":27,"Fortnightly":19,"Monthly":25,"Quarterly":22,"Every 3 Months":23,"Annually":15},"Jacket":{"Weekly":19,"Bi-Weekly":20,"Fortnightly":26,"Monthly":24,"Quarterly":25,"Every 3 Months":29,"Annually":20},"Jeans":{"Weekly":14,"Bi-Weekly":9,"Fortnightly":16,"Monthly":28,"Quarterly":19,"Every 3 Months":18,"Annually":20},"Jewelry":{"Weekly":24,"Bi-Weekly":32,"Fortnightly":21,"Monthly":20,"Quarterly":23,"Every 3 Months":25,"Annually":26},"Pants":{"Weekly":26,"Bi-Weekly":19,"Fortnightly":20,"Monthly":32,"Quarterly":28,"Every 3 Months":25,"Annually":21},"Sandals":{"Weekly":22,"Bi-Weekly":21,"Fortnightly":24,"Monthly":23,"Quarterly":17,"Every 3 Months":27,"Annually":26},"Scarf":{"Weekly":20,"Bi-Weekly":20,"Fortnightly":23,"Monthly":24,"Quarterly":20,"Every 3 Months":21,"Annually":29},"Shirt":{"Weekly":26,"Bi-Weekly":23,"Fortnightly":19,"Monthly":28,"Quarterly":22,"Every 3 Months":20,"Annually":31},"Shoes":{"Weekly":21,"Bi-Weekly":20,"Fortnightly":19,"Monthly":22,"Quarterly":18,"Every 3 Months":24,"Annually":26},"Shorts":{"Weekly":25,"Bi-Weekly":27,"Fortnightly":24,"Monthly":20,"Quarterly":20,"Every 3 Months":24,"Annually":17},"Skirt":{"Weekly":27,"Bi-Weekly":19,"Fortnightly":24,"Monthly":25,"Quarterly":19,"Every 3 Months":24,"Annually":20},"Sneakers":{"Weekly":20,"Bi-Weekly":16,"Fortnightly":28,"Monthly":22,"Quarterly":17,"Every 3 Months":22,"Annually":20},"Socks":{"Weekly":14,"Bi-Weekly":24,"Fortnightly":17,"Monthly":26,"Quarterly":25,"Every 3 Months":24,"Annually":29},"Sunglasses":{"Weekly":24,"Bi-Weekly":23,"Fortnightly":24,"Monthly":18,"Quarterly":36,"Every 3 Months":17,"Annually":19},"Sweater":{"Weekly":31,"Bi-Weekly":29,"Fortnightly":25,"Monthly":15,"Quarterly":20,"Every 3 Months":22,"Annually":22},"T-shirt":{"Weekly":19,"Bi-Weekly":19,"Fortnightly":19,"Monthly":22,"Quarterly":22,"Every 3 Months":26,"Annually":20}},"catTotals":{"Clothing":104264.0,"Footwear":36093.0,"Outerwear":18524.0,"Accessories":74200.0},"freqs":["Weekly","Bi-Weekly","Fortnightly","Monthly","Quarterly","Every 3 Months","Annually"],"items":["Backpack","Belt","Blouse","Boots","Coat","Dress","Gloves","Handbag","Hat","Hoodie","Jacket","Jeans","Jewelry","Pants","Sandals","Scarf","Shirt","Shoes","Shorts","Skirt","Sneakers","Socks","Sunglasses","Sweater","T-shirt"],"seasons":["Spring","Summer","Fall","Winter"],"categories":["Clothing","Accessories","Footwear","Outerwear"]};
+
+// Category membership for heatmap filter
+const ITEM_CATEGORY = {
+  Backpack:"Accessories",Belt:"Accessories",Handbag:"Accessories",Hat:"Accessories",
+  Jewelry:"Accessories",Scarf:"Accessories",Sunglasses:"Accessories",Gloves:"Accessories",
+  Blouse:"Clothing",Dress:"Clothing",Hoodie:"Clothing",Jeans:"Clothing",Pants:"Clothing",
+  Shirt:"Clothing",Shorts:"Clothing",Skirt:"Clothing",Socks:"Clothing",Sweater:"Clothing","T-shirt":"Clothing",
+  Boots:"Footwear",Sandals:"Footwear",Shoes:"Footwear",Sneakers:"Footwear",
+  Coat:"Outerwear",Jacket:"Outerwear"
+};
+
+const PALETTE = {
+  Clothing:  "#c0522a",
+  Accessories: "#c89b3c",
+  Footwear:  "#6b7c5e",
+  Outerwear: "#8a6e7a"
+};
+
+const tooltip = document.getElementById('tooltip');
+
+function showTip(html, event) {
+  tooltip.innerHTML = html;
+  tooltip.classList.add('visible');
+  moveTip(event);
+}
+function moveTip(event) {
+  let x = event.clientX + 14, y = event.clientY - 10;
+  if (x + 210 > window.innerWidth) x = event.clientX - 220;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top  = y + 'px';
+}
+function hideTip() { tooltip.classList.remove('visible'); }
+
+// ══════════════════════════════════════════════════════════
+// VIZ 1 — BAR CHART
+// ══════════════════════════════════════════════════════════
+(function buildBar() {
+  const W = 580, H = 340;
+  const m = { top: 20, right: 20, bottom: 60, left: 80 };
+
+  const chartData = Object.entries(CHART_DATA.catTotals)
+    .map(([k,v]) => ({category:k, total:v}))
+    .sort((a,b) => b.total - a.total);
+
+  const svg = d3.select('#vis1').append('svg')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('style', 'width:100%;max-width:580px;display:block;');
+
+  const x = d3.scaleBand()
+    .domain(chartData.map(d => d.category))
+    .range([m.left, W - m.right]).padding(0.35);
+
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(chartData, d => d.total) * 1.1])
+    .range([H - m.bottom, m.top]);
+
+  // gridlines
+  svg.append('g').attr('class','grid')
+    .attr('transform', `translate(${m.left},0)`)
+    .call(d3.axisLeft(y).tickSize(-(W - m.left - m.right)).tickFormat(''))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('line').attr('stroke','#e8e0d4').attr('stroke-dasharray','3,3'));
+
+  // axes
+  svg.append('g').attr('transform', `translate(0,${H-m.bottom})`)
+    .call(d3.axisBottom(x))
+    .call(g => g.select('.domain').attr('stroke','#d4c8be'))
+    .call(g => g.selectAll('text').style('font-size','13px').style('fill','#4a3f38'));
+
+  svg.append('g').attr('transform', `translate(${m.left},0)`)
+    .call(d3.axisLeft(y).ticks(5).tickFormat(d => '$' + d3.format(',')(d)))
+    .call(g => g.select('.domain').remove())
+    .call(g => g.selectAll('text').style('font-size','12px').style('fill','#4a3f38'));
+
+  // axis labels
+  svg.append('text').attr('x', W/2).attr('y', H-8)
+    .attr('text-anchor','middle').attr('font-size','13px').attr('fill','#4a3f38').text('Category');
+
+  svg.append('text').attr('transform','rotate(-90)')
+    .attr('x', -(H/2)).attr('y', 18)
+    .attr('text-anchor','middle').attr('font-size','13px').attr('fill','#4a3f38').text('Total Purchase Amount (USD)');
+
+  // bars
+  svg.selectAll('rect.bar').data(chartData).enter().append('rect')
+    .attr('class','bar')
+    .attr('x', d => x(d.category))
+    .attr('y', d => y(d.total))
+    .attr('width', x.bandwidth())
+    .attr('height', d => H - m.bottom - y(d.total))
+    .attr('fill', d => PALETTE[d.category])
+    .attr('rx', 3)
+    .style('cursor','pointer')
+    .on('mouseover', function(event, d) {
+      d3.select(this).attr('opacity', 0.8);
+      showTip(`<strong>${d.category}</strong><br>$${d3.format(',')(d.total)}<br>${(d.total/233081*100).toFixed(1)}% of total`, event);
+    })
+    .on('mousemove', moveTip)
+    .on('mouseout', function() { d3.select(this).attr('opacity', 1); hideTip(); });
+
+  // value labels
+  svg.selectAll('text.val').data(chartData).enter().append('text')
+    .attr('class','val')
+    .attr('x', d => x(d.category) + x.bandwidth()/2)
+    .attr('y', d => y(d.total) - 6)
+    .attr('text-anchor','middle')
+    .attr('font-size','12px')
+    .attr('font-weight','600')
+    .attr('fill', d => PALETTE[d.category])
+    .text(d => '$' + d3.format(',')(d.total));
+
+  // legend
+  const leg = d3.select('#legend1');
+  chartData.forEach(d => {
+    const item = leg.append('div').attr('class','legend-item');
+    item.append('div').attr('class','legend-swatch').style('background', PALETTE[d.category]);
+    item.append('span').text(d.category);
+  });
+})();
+
+// ══════════════════════════════════════════════════════════
+// VIZ 2 — BOXPLOT
+// ══════════════════════════════════════════════════════════
+(function buildBoxplot() {
+  const seasons = ['Spring','Summer','Fall','Winter'];
+  const categories = ['Clothing','Accessories','Footwear','Outerwear'];
+
+  function draw(gender, catFilter) {
+    d3.select('#vis2').selectAll('*').remove();
+    d3.select('#legend2').selectAll('*').remove();
+
+    const activeCats = catFilter === 'All' ? categories : [catFilter];
+    const bpData = CHART_DATA.boxplot[gender];
+
+    // build flat array: one box per [season, category]
+    const boxes = [];
+    seasons.forEach(s => {
+      activeCats.forEach(c => {
+        const stats = bpData[s][c];
+        if (stats) boxes.push({ season:s, category:c, ...stats });
+      });
+    });
+
+    const W = Math.max(520, activeCats.length * seasons.length * 60 + 120);
+    const H = 320;
+    const m = { top: 20, right: 20, bottom: 60, left: 65 };
+
+    const svg = d3.select('#vis2').append('svg')
+      .attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('style', 'width:100%;max-width:720px;display:block;');
+
+    // x scale: group by season, within each season group by category
+    const xSeason = d3.scaleBand()
+      .domain(seasons).range([m.left, W - m.right]).padding(0.15);
+
+    const xCat = d3.scaleBand()
+      .domain(activeCats).range([0, xSeason.bandwidth()]).padding(0.1);
+
+    const y = d3.scaleLinear().domain([0, 110]).range([H - m.bottom, m.top]);
+
+    // gridlines
+    svg.append('g')
+      .attr('transform', `translate(${m.left},0)`)
+      .call(d3.axisLeft(y).tickSize(-(W - m.left - m.right)).tickFormat(''))
+      .call(g => g.select('.domain').remove())
+      .call(g => g.selectAll('line').attr('stroke','#e8e0d4').attr('stroke-dasharray','3,3'));
+
+    // y axis
+    svg.append('g').attr('transform', `translate(${m.left},0)`)
+      .call(d3.axisLeft(y).ticks(6).tickFormat(d => '$'+d))
+      .call(g => g.select('.domain').remove())
+      .call(g => g.selectAll('text').style('font-size','12px').style('fill','#4a3f38'));
+
+    // season x axis
+    svg.append('g').attr('transform', `translate(0,${H-m.bottom})`)
+      .call(d3.axisBottom(xSeason))
+      .call(g => g.select('.domain').attr('stroke','#d4c8be'))
+      .call(g => g.selectAll('text').style('font-size','13px').style('fill','#4a3f38'));
+
+    svg.append('text').attr('x', W/2).attr('y', H-8)
+      .attr('text-anchor','middle').attr('font-size','13px').attr('fill','#4a3f38').text('Season');
+    svg.append('text').attr('transform','rotate(-90)')
+      .attr('x',-(H/2)).attr('y',16)
+      .attr('text-anchor','middle').attr('font-size','13px').attr('fill','#4a3f38').text('Purchase Amount (USD)');
+
+    // draw boxes
+    boxes.forEach(d => {
+      const bx = xSeason(d.season) + xCat(d.category);
+      const bw = xCat.bandwidth();
+      const col = PALETTE[d.category];
+      const cx = bx + bw/2;
+
+      // whisker line
+      svg.append('line').attr('x1',cx).attr('x2',cx)
+        .attr('y1',y(d.wl)).attr('y2',y(d.wh))
+        .attr('stroke',col).attr('stroke-width',1.5);
+
+      // whisker caps
+      [d.wl, d.wh].forEach(val => {
+        svg.append('line')
+          .attr('x1',cx-bw*0.18).attr('x2',cx+bw*0.18)
+          .attr('y1',y(val)).attr('y2',y(val))
+          .attr('stroke',col).attr('stroke-width',1.5);
+      });
+
+      // IQR box
+      svg.append('rect')
+        .attr('x',bx).attr('y',y(d.q3))
+        .attr('width',bw).attr('height',y(d.q1)-y(d.q3))
+        .attr('fill',col).attr('fill-opacity',0.25)
+        .attr('stroke',col).attr('stroke-width',1.5).attr('rx',2)
+        .style('cursor','pointer')
+        .on('mouseover', (event) => {
+          showTip(`<strong>${d.category}</strong> · ${d.season}<br>
+            Median: $${d.median}<br>Q1: $${d.q1} / Q3: $${d.q3}<br>
+            Range: $${d.wl}–$${d.wh}`, event);
+        })
+        .on('mousemove', moveTip).on('mouseout', hideTip);
+
+      // median line
+      svg.append('line')
+        .attr('x1',bx).attr('x2',bx+bw)
+        .attr('y1',y(d.median)).attr('y2',y(d.median))
+        .attr('stroke',col).attr('stroke-width',2.5);
+    });
+
+    // legend
+    const leg = d3.select('#legend2');
+    activeCats.forEach(c => {
+      const item = leg.append('div').attr('class','legend-item');
+      item.append('div').attr('class','legend-swatch').style('background',PALETTE[c]);
+      item.append('span').text(c);
+    });
+  }
+
+  draw('All','All');
+  document.getElementById('genderFilter').addEventListener('change', function() {
+    draw(this.value, document.getElementById('categoryFilter').value);
+  });
+  document.getElementById('categoryFilter').addEventListener('change', function() {
+    draw(document.getElementById('genderFilter').value, this.value);
+  });
+})();
+
+// ══════════════════════════════════════════════════════════
+// VIZ 3 — HEATMAP
+// ══════════════════════════════════════════════════════════
+(function buildHeatmap() {
+  const freqs = CHART_DATA.freqs;
+  let selectedCell = null;
+
+  function draw(catFilter) {
+    d3.select('#vis3').selectAll('*').remove();
+
+    const items = catFilter === 'All'
+      ? CHART_DATA.items
+      : CHART_DATA.items.filter(i => ITEM_CATEGORY[i] === catFilter);
+
+    const cellH = 22, cellW = 82;
+    const m = { top: 12, right: 20, bottom: 60, left: 100 };
+    const W = m.left + freqs.length * cellW + m.right;
+    const H = m.top + items.length * cellH + m.bottom;
+
+    const allVals = items.flatMap(it => freqs.map(f => CHART_DATA.heatmap[it][f]));
+    const maxVal = d3.max(allVals);
+
+    const colorScale = d3.scaleSequential()
+      .domain([0, maxVal])
+      .interpolator(d3.interpolate('#f0e6d8', '#8a3318'));
+
+    const svg = d3.select('#vis3').append('svg')
+      .attr('width', W).attr('height', H);
+
+    // x axis (frequencies)
+    svg.append('g')
+      .attr('transform', `translate(${m.left}, ${H - m.bottom + 4})`)
+      .call(d3.axisBottom(d3.scaleBand().domain(freqs).range([0, freqs.length * cellW]))
+        .tickSize(0))
+      .call(g => g.select('.domain').remove())
+      .call(g => g.selectAll('text')
+        .attr('transform','rotate(-35)')
+        .attr('text-anchor','end')
+        .style('font-size','11px').style('fill','#4a3f38'));
+
+    // y axis (items)
+    svg.selectAll('text.ylab').data(items).enter().append('text')
+      .attr('class','ylab')
+      .attr('x', m.left - 6)
+      .attr('y', (d,i) => m.top + i * cellH + cellH/2 + 4)
+      .attr('text-anchor','end')
+      .style('font-size','11px').style('fill','#4a3f38')
+      .style('cursor','default')
+      .text(d => d);
+
+    // cells
+    items.forEach((item, ri) => {
+      freqs.forEach((freq, ci) => {
+        const val = CHART_DATA.heatmap[item][freq];
+        const cellX = m.left + ci * cellW;
+        const cellY = m.top + ri * cellH;
+
+        const rect = svg.append('rect')
+          .attr('x', cellX + 1).attr('y', cellY + 1)
+          .attr('width', cellW - 2).attr('height', cellH - 2)
+          .attr('fill', colorScale(val))
+          .attr('rx', 2)
+          .style('cursor','pointer')
+          .on('mouseover', function(event) {
+            showTip(`<strong>${item}</strong><br>${freq}<br>${val} customers`, event);
+          })
+          .on('mousemove', moveTip)
+          .on('mouseout', hideTip)
+          .on('click', function() {
+            // highlight row & col
+            svg.selectAll('rect.cell-highlight').remove();
+            svg.selectAll('text.ylab')
+              .style('fill', d => d === item ? '#c0522a' : '#4a3f38')
+              .style('font-weight', d => d === item ? '600' : '300');
+            // highlight col header
+            svg.selectAll('text.xlab-highlight').remove();
+          });
+
+        // small count label if cell is wide enough
+        svg.append('text')
+          .attr('x', cellX + cellW/2).attr('y', cellY + cellH/2 + 4)
+          .attr('text-anchor','middle')
+          .style('font-size','10px')
+          .style('fill', val > maxVal * 0.55 ? 'white' : '#3a2820')
+          .style('pointer-events','none')
+          .text(val);
+      });
+    });
+
+    // color legend bar
+    const legW = 160, legH = 10;
+    const legX = W - m.right - legW;
+    const legY = H - 22;
+
+    const defs = svg.append('defs');
+    const grad = defs.append('linearGradient').attr('id','hmGrad');
+    grad.append('stop').attr('offset','0%').attr('stop-color','#f0e6d8');
+    grad.append('stop').attr('offset','100%').attr('stop-color','#8a3318');
+
+    svg.append('rect').attr('x',legX).attr('y',legY)
+      .attr('width',legW).attr('height',legH).attr('rx',2)
+      .attr('fill','url(#hmGrad)');
+    svg.append('text').attr('x',legX).attr('y',legY-3)
+      .style('font-size','10px').style('fill','#8a7a70').text('Low');
+    svg.append('text').attr('x',legX+legW).attr('y',legY-3)
+      .attr('text-anchor','end')
+      .style('font-size','10px').style('fill','#8a7a70').text('High');
+  }
+
+  draw('All');
+  document.getElementById('heatCatFilter').addEventListener('change', function() {
+    draw(this.value);
+  });
+})();
+</script>
+</body>
+</html>
